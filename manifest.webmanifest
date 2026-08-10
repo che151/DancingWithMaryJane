@@ -1,0 +1,14 @@
+{
+  "name": "Dance With Mary Jane",
+  "short_name": "Mary Jane",
+  "description": "A personal Smoke Coin economy to moderate weed use.",
+  "start_url": ".",
+  "scope": ".",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#12140f",
+  "theme_color": "#12140f",
+  "icons": [
+    { "src": "icon.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "any maskable" }
+  ]
+}

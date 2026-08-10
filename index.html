@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <title>Dance With Mary Jane</title>
+  <meta name="theme-color" content="#141019" />
+  <link rel="manifest" href="manifest.webmanifest" />
+  <link rel="icon" href="icon.svg" type="image/svg+xml" />
+  <link rel="apple-touch-icon" href="icon.svg" />
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <main class="app">
+    <header class="topbar">
+      <div>
+        <p class="app-name">Dance With Mary Jane</p>
+        <p class="app-sub" id="today-label">—</p>
+      </div>
+      <button class="icon-btn" id="menu-btn" aria-label="Menu" title="Menu">☰</button>
+    </header>
+
+    <div id="view-main">
+      <section class="balance-card">
+        <p class="balance-label">Smoke Coins</p>
+        <p class="balance-value" id="balance">0</p>
+        <div class="context">
+          <span class="mult" id="mult">×1</span>
+          <span class="ctx-pills" id="ctx-pills"></span>
+        </div>
+      </section>
+
+      <section class="group">
+        <h2 class="group-title">Smoke</h2>
+        <div class="btn-grid" id="smoke-buttons"></div>
+      </section>
+
+      <section class="group">
+        <h2 class="group-title">Earn &amp; log</h2>
+        <div class="btn-grid">
+          <button class="action earn" data-earn="workout">
+            <span class="a-name">Workout</span><span class="a-meta" id="workout-meta">+1</span>
+          </button>
+          <button class="action earn" data-earn="cleaning">
+            <span class="a-name">Cleaning</span><span class="a-meta" id="clean-meta">+1</span>
+          </button>
+          <button class="action special" id="exc-btn">
+            <span class="a-name">Exceptional</span><span class="a-meta" id="exc-meta">free</span>
+          </button>
+          <button class="action penalty" data-munch>
+            <span class="a-name">Munchies</span><span class="a-meta" id="munch-meta">−1</span>
+          </button>
+        </div>
+      </section>
+
+      <section class="group">
+        <div class="group-head">
+          <h2 class="group-title">Recent</h2>
+          <button class="link-btn" id="see-all">See all →</button>
+        </div>
+        <ul class="log" id="log"></ul>
+      </section>
+    </div>
+
+    <section class="view" id="view-history" hidden>
+      <header class="view-head">
+        <button class="icon-btn" data-back aria-label="Back">←</button>
+        <h2 class="view-title">History</h2>
+        <input type="month" id="hist-month" />
+      </header>
+      <p class="hint" id="hist-summary"></p>
+      <ul class="log" id="history-log"></ul>
+    </section>
+
+    <section class="view" id="view-vacation" hidden>
+      <header class="view-head">
+        <button class="icon-btn" data-back aria-label="Back">←</button>
+        <h2 class="view-title">Vacation &amp; holidays</h2>
+      </header>
+      <p class="hint">Tap a day at least 7 days ahead to mark it off (drops the grind +1). Tap a day off again to remove it.</p>
+      <div class="cal">
+        <div class="cal-nav">
+          <button class="icon-btn" id="cal-prev" aria-label="Previous month">‹</button>
+          <span class="cal-label" id="cal-label">—</span>
+          <button class="icon-btn" id="cal-next" aria-label="Next month">›</button>
+        </div>
+        <div id="calendar"></div>
+        <div class="cal-legend">
+          <span><i class="dot weekend"></i>weekend</span>
+          <span><i class="dot off"></i>day off</span>
+          <span><i class="dot today"></i>today</span>
+        </div>
+      </div>
+      <ul class="daysoff-list" id="daysoff"></ul>
+    </section>
+  </main>
+
+  <dialog id="menu-dialog" class="dialog menu">
+    <button class="menu-item" data-view="history">History <span>by month</span></button>
+    <button class="menu-item" data-view="vacation">Vacation &amp; holidays <span>days off</span></button>
+    <button class="btn ghost" data-close>Close</button>
+  </dialog>
+
+  <dialog id="dayoff-dialog" class="dialog">
+    <form method="dialog" id="dayoff-form">
+      <h3>Mark day off</h3>
+      <p class="hint" id="dayoff-date">—</p>
+      <textarea id="dayoff-reason" rows="2" placeholder="Reason (optional) — e.g. holiday, trip, day off"></textarea>
+      <div class="dialog-actions">
+        <button value="cancel" class="btn ghost" type="submit">Cancel</button>
+        <button value="ok" class="btn" type="submit">Mark off</button>
+      </div>
+    </form>
+  </dialog>
+
+  <dialog id="reason-dialog" class="dialog">
+    <form method="dialog" id="reason-form">
+      <h3>Exceptional — free pipe</h3>
+      <p class="hint">A written reason is mandatory. Costs 0 coins, allowed even at 0 balance.</p>
+      <textarea id="reason-text" rows="3" placeholder="Why is this one an exception?"></textarea>
+      <div class="dialog-actions">
+        <button value="cancel" class="btn ghost" type="submit">Cancel</button>
+        <button value="ok" class="btn" type="submit" id="reason-ok">Use exceptional</button>
+      </div>
+    </form>
+  </dialog>
+
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+  <script type="module" src="src/app.js"></script>
+</body>
+</html>
