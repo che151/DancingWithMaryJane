@@ -1,6 +1,6 @@
 {
-  "name": "Dancing with MJ",
-  "short_name": "Dancing with MJ",
+  "name": "Dance with MJ",
+  "short_name": "Dance with MJ",
   "description": "A personal Smoke Coin economy to moderate weed use.",
   "start_url": ".",
   "scope": ".",
@@ -9,6 +9,6 @@
   "background_color": "#12140f",
   "theme_color": "#12140f",
   "icons": [
-    { "src": "icon.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "any maskable" }
+    { "src": "icon-smoke.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "any maskable" }
   ]
 }

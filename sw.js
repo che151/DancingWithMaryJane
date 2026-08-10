@@ -1,9 +1,9 @@
 // Minimal offline cache for the app shell. Bump CACHE on any file change.
-const CACHE = 'dwmj-v7';
+const CACHE = 'dwmj-v8';
 const SHELL = [
   '.', 'index.html', 'styles.css',
   'src/app.js', 'src/economy.js',
-  'manifest.webmanifest', 'icon.svg',
+  'manifest.webmanifest', 'icon-smoke.svg',
 ];
 
 self.addEventListener('install', e => {
