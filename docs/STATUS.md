@@ -17,7 +17,9 @@ guard, localStorage persistence, idempotent daily catch-up). Files:
 - `README.md` — run instructions (`python -m http.server`, then localhost).
 - `CLAUDE.md` — project guide.
 
-Git initialized, **nothing committed yet** (awaiting Angel's go-ahead).
+**Initial commit made** on branch `main` (`9737761`). Not yet pushed to a remote
+— Angel will create a public GitHub repo and enable Pages (steps in `README.md`)
+to install it on the phone over HTTPS.
 
 ### Resolved this session
 - **Broke behavior → hard block** (won't log an unaffordable smoke).
