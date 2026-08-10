@@ -1,12 +1,13 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
-  <rect width="512" height="512" rx="112" fill="#12140f"/>
-  <circle cx="256" cy="256" r="150" fill="none" stroke="#e8c04c" stroke-width="14"/>
-  <g fill="#7cc24a" transform="translate(256 268)">
-    <path d="M0 44 C-6 6 -6 -70 0 -120 C6 -70 6 6 0 44 Z"/>
-    <path d="M0 40 C-26 18 -60 -30 -78 -86 C-30 -60 -8 -14 0 30 Z"/>
-    <path d="M0 40 C26 18 60 -30 78 -86 C30 -60 8 -14 0 30 Z"/>
-    <path d="M0 44 C-40 34 -92 8 -128 -34 C-78 -24 -26 0 0 34 Z"/>
-    <path d="M0 44 C40 34 92 8 128 -34 C78 -24 26 0 0 34 Z"/>
-    <rect x="-6" y="40" width="12" height="40" rx="6"/>
+  <rect width="512" height="512" rx="112" fill="#141019"/>
+  <g fill="none" stroke-linecap="round">
+    <path d="M256 432 C 306 386 208 344 256 292 C 300 246 214 206 258 156 C 288 122 246 112 268 86"
+          stroke="#cbaaf2" stroke-width="26"/>
+    <path d="M244 432 C 214 398 176 374 196 332 C 212 298 178 282 194 252"
+          stroke="#a98ce0" stroke-width="18" opacity="0.72"/>
+    <path d="M268 432 C 300 400 336 380 318 338 C 304 306 332 294 320 266"
+          stroke="#8f78c8" stroke-width="16" opacity="0.6"/>
   </g>
+  <circle cx="256" cy="452" r="34" fill="#e8c04c" opacity="0.18"/>
+  <circle cx="256" cy="452" r="15" fill="#e8c04c"/>
 </svg>
