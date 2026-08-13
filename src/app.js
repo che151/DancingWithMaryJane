@@ -9,10 +9,11 @@ import {
 } from './economy.js';
 
 const STORE_KEY = 'dwmj.state.v1';
-const SMOKE_ORDER = ['oneHitter', 'pipe', 'bong'];
+const SMOKE_ORDER = ['oneHitter', 'pipe', 'bong', 'xmax', 'xq2small', 'xq2large'];
 const LABELS = {
   daily: 'Daily', workout: 'Workout', cleaning: 'Cleaning', friday: 'Friday bonus',
   oneHitter: DISPLAY.oneHitter, pipe: DISPLAY.pipe, bong: DISPLAY.bong,
+  xmax: DISPLAY.xmax, xq2small: DISPLAY.xq2small, xq2large: DISPLAY.xq2large,
   exceptional: 'Exceptional', munchies: 'Munchies',
 };
 

@@ -4,11 +4,17 @@
 
 export const EARN = { daily: 1, workout: 1, friday: 5, cleaning: 1 };
 
-export const BASE_COST = { oneHitter: 1, pipe: 2, bong: 3 };
+export const BASE_COST = {
+  oneHitter: 1, pipe: 2, bong: 3,
+  xmax: 1, xq2small: 2, xq2large: 3,
+};
 
 /** Display names for the UI. Internal keys above stay stable. */
 export const CURRENCY = 'Smoke Coins';
-export const DISPLAY = { oneHitter: 'One-hitter', pipe: 'Pipe', bong: 'Bong / Joint' };
+export const DISPLAY = {
+  oneHitter: 'One-hitter', pipe: 'Pipe', bong: 'Bong / Joint',
+  xmax: 'XMax', xq2small: 'XQ2 small', xq2large: 'XQ2 large',
+};
 
 /** Lose 1 Smoke Coin for giving in to the munchies (overeating). */
 export const MUNCHIES_PENALTY = 1;

@@ -40,6 +40,9 @@ negative — consistent with the no-debt rule).
 | One-hitter    | 1         |
 | Pipe          | 2         |
 | Bong / Joint  | 3         |
+| XMax          | 1         |
+| XQ2 small     | 2         |
+| XQ2 large     | 3         |
 
 ## Spending — multiplier
 
@@ -63,6 +66,9 @@ So the multiplier ranges 1–3.
 | One-hitter       | 1                    | 2                            | 3             |
 | Pipe             | 2                    | 4                            | 6             |
 | Bong / Joint     | 3                    | 6                            | 9             |
+| XMax             | 1                    | 2                            | 3             |
+| XQ2 small        | 2                    | 4                            | 6             |
+| XQ2 large        | 3                    | 6                            | 9             |
 
 ("AM" = before 6:00 PM, "PM" = 6:00 PM or later. "Grind" = work today **and**
 tomorrow; "non-grind" = weekend, Friday, day off, or the eve of time off.)
@@ -94,8 +100,8 @@ Every action writes a log entry:
 
 - timestamp
 - type: `earn` (daily / workout / cleaning / friday), `spend` (one-hitter / pipe /
-  bong / exceptional), or `penalty` (munchies) — note the `bong` action is shown in
-  the UI as "Bong / Joint"
+  bong / xmax / xq2small / xq2large / exceptional), or `penalty` (munchies) — note
+  the `bong` action is shown in the UI as "Bong / Joint"
 - coin delta (signed)
 - multiplier applied (for spends)
 - balance after
