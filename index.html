@@ -119,6 +119,18 @@
     </form>
   </dialog>
 
+  <dialog id="edit-dialog" class="dialog">
+    <form method="dialog" id="edit-form">
+      <h3>Replace entry</h3>
+      <p class="hint">Deletes this entry and leaves a note in its place. Any coins it added or removed are undone.</p>
+      <textarea id="edit-text" rows="3" placeholder="Message for the replacement note (required)"></textarea>
+      <div class="dialog-actions">
+        <button value="cancel" class="btn ghost" type="submit">Cancel</button>
+        <button value="ok" class="btn" type="submit">Replace</button>
+      </div>
+    </form>
+  </dialog>
+
   <dialog id="reason-dialog" class="dialog">
     <form method="dialog" id="reason-form">
       <h3>Exceptional — free pipe</h3>

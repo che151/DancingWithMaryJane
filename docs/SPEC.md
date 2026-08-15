@@ -109,8 +109,15 @@ Every action writes a log entry:
 - balance after
 - optional free-text note (mandatory for exceptionals)
 
+### Editing history
+
+In the full History view, any entry can be **replaced**. You give a mandatory
+message; the entry is deleted and a `note` entry (delta 0) with that message
+takes its place, keeping the original timestamp. The removed entry's coin effect
+is **undone** and all running balances are recomputed — the log stays the single
+source of truth for the balance (balance = sum of deltas).
+
 ## Open questions / possible later
 
 - Trend chart + streaks (days under budget, longest gap between smokes).
-- Editable/deletable log entries (honesty vs. tidy history).
 - Backup/export of the log (single JSON file).

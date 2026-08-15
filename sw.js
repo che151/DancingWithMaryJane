@@ -1,5 +1,5 @@
 // Minimal offline cache for the app shell. Bump CACHE on any file change.
-const CACHE = 'dwmj-v9';
+const CACHE = 'dwmj-v10';
 const SHELL = [
   '.', 'index.html', 'styles.css',
   'src/app.js', 'src/economy.js',
@@ -17,13 +17,14 @@ self.addEventListener('activate', e => {
   );
 });
 
-// Network-first: always try the network (so updates land immediately), fall
-// back to cache only when offline. Keeps the app installable + offline-capable
-// without serving stale code during iteration.
+// Network-first, cache-bypassing: always try the network with {cache:'no-store'}
+// so the browser's own HTTP cache can't serve a stale file (the bug that let an
+// old economy.js linger while index.html was fresh). Fall back to the SW cache
+// only when offline. Keeps the app installable + offline-capable.
 self.addEventListener('fetch', e => {
   if (e.request.method !== 'GET') return;
   e.respondWith(
-    fetch(e.request).then(res => {
+    fetch(e.request, { cache: 'no-store' }).then(res => {
       const copy = res.clone();
       caches.open(CACHE).then(c => c.put(e.request, copy)).catch(() => {});
       return res;

@@ -16,7 +16,7 @@ const LABELS = {
   danish: 'Danish', grocery: 'Groceries',
   oneHitter: DISPLAY.oneHitter, pipe: DISPLAY.pipe, bong: DISPLAY.bong,
   xmax: DISPLAY.xmax, xq2small: DISPLAY.xq2small, xq2large: DISPLAY.xq2large,
-  exceptional: 'Exceptional', munchies: 'Munchies',
+  exceptional: 'Exceptional', munchies: 'Munchies', note: 'Note',
 };
 
 // --- state ---
@@ -27,6 +27,16 @@ function loadState() {
       const st = { balance: 0, lastCreditDate: null, daysOff: [], log: [], ...s };
       // migrate daysOff from string[] to {date, reason}[]
       st.daysOff = (st.daysOff || []).map(o => typeof o === 'string' ? { date: o, reason: '' } : o);
+      // heal a corrupted balance: an old cached economy.js could credit an
+      // undefined amount (unknown earn key), poisoning balance to NaN, which
+      // JSON stores as null. Drop the junk log entries and recover the balance
+      // from the last good entry so no coins are lost.
+      st.log = (st.log || []).filter(e => e && Number.isFinite(e.delta));
+      st.log.forEach(e => { if (!e.id) e.id = newId(); });
+      if (!Number.isFinite(st.balance)) {
+        st.balance = st.log.length ? st.log[st.log.length - 1].balAfter : 0;
+        if (!Number.isFinite(st.balance)) st.balance = st.log.reduce((n, e) => n + e.delta, 0);
+      }
       return st;
     }
   } catch { /* ignore corrupt store */ }
@@ -71,8 +81,35 @@ const exceptionalsThisMonth = () => {
 };
 
 // --- log + mutations ---
+function newId() {
+  return (crypto.randomUUID && crypto.randomUUID()) || `${Date.now()}-${Math.random().toString(36).slice(2)}`;
+}
 function log(type, action, delta, mult, note, ts) {
-  state.log.push({ ts: (ts || new Date()).toISOString(), type, action, delta, mult: mult ?? null, balAfter: state.balance, note: note || '' });
+  state.log.push({ id: newId(), ts: (ts || new Date()).toISOString(), type, action, delta, mult: mult ?? null, balAfter: state.balance, note: note || '' });
+}
+
+/** Recompute every entry's running balance and the total. Log is the truth. */
+function recomputeBalances() {
+  let run = 0;
+  for (const e of state.log) { run += e.delta; e.balAfter = run; }
+  state.balance = run;
+}
+
+/**
+ * Replace a log entry with a note carrying `message`. The original entry is
+ * removed (its coin effect undone) and balances are recomputed. A message is
+ * mandatory — it is the whole point of the tombstone.
+ */
+function replaceEntry(id, message) {
+  const msg = (message || '').trim();
+  if (!msg) { toast('A message is required.'); return false; }
+  const i = state.log.findIndex(e => e.id === id);
+  if (i < 0) return false;
+  const orig = state.log[i];
+  state.log[i] = { id: orig.id, ts: orig.ts, type: 'note', action: 'note', delta: 0, mult: null, balAfter: 0, note: msg };
+  recomputeBalances();
+  save(); render(); renderHistory();
+  return true;
 }
 
 function creditCatchUp() {
@@ -94,6 +131,8 @@ function creditCatchUp() {
 }
 
 function earn(action) {
+  const amount = EARN[action];
+  if (!Number.isFinite(amount)) return toast(`Can't earn "${action}" — reload the app to update.`);
   if (action === 'cleaning') {
     if (countToday('cleaning') >= CLEANING_PER_DAY) return toast(`Cleaning already logged today (max ${CLEANING_PER_DAY}/day).`);
     if (cleaningThisWeek() >= CLEANING_PER_WEEK) return toast(`Cleaning cap reached (${CLEANING_PER_WEEK} per week).`);
@@ -109,8 +148,8 @@ function earn(action) {
     if (countToday('grocery') >= GROCERY_PER_DAY) return toast(`Groceries already logged today (max ${GROCERY_PER_DAY}/day).`);
     if (groceryThisWeek() >= GROCERY_PER_WEEK) return toast(`Groceries cap reached (${GROCERY_PER_WEEK} per week).`);
   }
-  state.balance += EARN[action];
-  log('earn', action, EARN[action], null);
+  state.balance += amount;
+  log('earn', action, amount, null);
   save(); render();
 }
 
@@ -160,16 +199,18 @@ const fmtDate = d => d.toLocaleDateString(undefined, { weekday: 'long', month: '
 const fmtTime = d => d.toLocaleTimeString(undefined, { hour: 'numeric', minute: '2-digit' });
 const escapeHtml = s => s.replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
 
-function logItemHtml(e) {
+function logItemHtml(e, editable = false) {
   const d = new Date(e.ts);
   const cls = e.delta > 0 ? 'pos' : e.delta < 0 ? 'neg' : 'zero';
   const sign = e.delta > 0 ? `+${e.delta}` : e.delta < 0 ? `${e.delta}` : '±0';
   let name = LABELS[e.action] || e.action;
   if (e.type === 'spend' && e.mult && e.action !== 'exceptional') name += ` ×${e.mult}`;
   const note = e.note ? `<span class="li-note">${escapeHtml(e.note)}</span>` : '';
+  const edit = editable ? `<button class="li-edit" data-edit="${e.id}" title="Replace with a note" aria-label="Replace entry">✎</button>` : '';
   return `<li class="log-item">
     <span class="li-main"><span class="li-name">${name}</span>${note}<span class="li-time">${fmtDate(d)} · ${fmtTime(d)}</span></span>
     <span class="li-right"><span class="li-delta ${cls}">${sign}</span><br><span class="li-bal">${e.balAfter}</span></span>
+    ${edit}
   </li>`;
 }
 
@@ -197,7 +238,7 @@ function renderSmokeButtons() {
 
 function renderRecent() {
   const items = state.log.slice(-5).reverse();
-  $('log').innerHTML = items.length ? items.map(logItemHtml).join('') : '<li class="log-empty">Nothing logged yet.</li>';
+  $('log').innerHTML = items.length ? items.map(e => logItemHtml(e)).join('') : '<li class="log-empty">Nothing logged yet.</li>';
 }
 
 function renderHistory() {
@@ -208,7 +249,7 @@ function renderHistory() {
   $('hist-summary').textContent = items.length
     ? `Earned +${earned} · Spent ${spent} · Net ${earned + spent >= 0 ? '+' : ''}${earned + spent} · ${items.length} entries`
     : 'No entries this month.';
-  $('history-log').innerHTML = items.length ? items.map(logItemHtml).join('') : '<li class="log-empty">No entries this month.</li>';
+  $('history-log').innerHTML = items.length ? items.map(e => logItemHtml(e, true)).join('') : '<li class="log-empty">No entries this month.</li>';
 }
 
 // --- vacation calendar ---
@@ -295,7 +336,24 @@ document.addEventListener('click', e => {
   if (e.target.closest('[data-munch]')) return munchies();
   const offBtn = e.target.closest('[data-off]');
   if (offBtn) return removeDayOff(offBtn.dataset.off);
+  const editBtn = e.target.closest('[data-edit]');
+  if (editBtn) {
+    pendingEditId = editBtn.dataset.edit;
+    $('edit-text').value = '';
+    $('edit-dialog').showModal();
+    $('edit-text').focus();
+    return;
+  }
   if (e.target.closest('[data-back]')) return showView('main');
+});
+
+let pendingEditId = null;
+$('edit-form').addEventListener('submit', e => {
+  if (e.submitter && e.submitter.value === 'ok' && !replaceEntry(pendingEditId, $('edit-text').value)) {
+    e.preventDefault();
+    return;
+  }
+  pendingEditId = null;
 });
 
 $('see-all').addEventListener('click', () => showView('history'));
@@ -343,6 +401,7 @@ $('reason-form').addEventListener('submit', e => {
 
 // --- boot ---
 const credited = creditCatchUp();
+save(); // persist any load-time migration (ids) or balance self-heal
 render();
 if (credited > 0) {
   toast(credited === 1 ? 'Welcome back — +1 for showing up today.'
