@@ -1,5 +1,5 @@
 // Minimal offline cache for the app shell. Bump CACHE on any file change.
-const CACHE = 'dwmj-v8';
+const CACHE = 'dwmj-v9';
 const SHELL = [
   '.', 'index.html', 'styles.css',
   'src/app.js', 'src/economy.js',

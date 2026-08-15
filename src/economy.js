@@ -2,11 +2,11 @@
 // Pure functions, no I/O. Single source of truth for earning & spending rules.
 // See docs/SPEC.md.
 
-export const EARN = { daily: 1, workout: 1, friday: 5, cleaning: 1 };
+export const EARN = { daily: 1, workout: 1, friday: 5, cleaning: 1, danish: 1, grocery: 1 };
 
 export const BASE_COST = {
-  oneHitter: 1, pipe: 2, bong: 3,
-  xmax: 1, xq2small: 2, xq2large: 3,
+  oneHitter: 1, pipe: 3, bong: 5,
+  xmax: 1, xq2small: 3, xq2large: 5,
 };
 
 /** Display names for the UI. Internal keys above stay stable. */
@@ -25,6 +25,9 @@ export const CLEANING_PER_DAY = 1;
 export const WORKOUT_PER_WEEK = 5;
 export const WORKOUT_PER_DAY = 1;
 export const MUNCHIES_PER_DAY = 1;
+export const DANISH_PER_DAY = 1;
+export const GROCERY_PER_WEEK = 2;
+export const GROCERY_PER_DAY = 1;
 export const VACATION_LEAD_DAYS = 7;
 
 /** Is this Date a work day? Mon–Fri and not marked as a day off. */

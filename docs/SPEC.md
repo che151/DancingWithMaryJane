@@ -18,6 +18,8 @@ Exceptionals for the escape valve).
 | Daily         | +1     | Once per day (just for showing up)               |
 | Workout       | +1     | Each logged workout, **max 1/day, 5/week**       |
 | Cleaning      | +1     | Each logged cleaning, **max 1/day, 2/week**      |
+| Danish        | +1     | Learning Danish, **max 1/day**                   |
+| Groceries     | +1     | Grocery shopping, **max 1/day, 2/week**          |
 | Friday bonus  | +5     | Every Friday (weekend fuel)                      |
 
 Earning is never affected by work day / vacation status. A Friday that is a
@@ -38,11 +40,11 @@ negative — consistent with the no-debt rule).
 | Action        | Base cost |
 |---------------|-----------|
 | One-hitter    | 1         |
-| Pipe          | 2         |
-| Bong / Joint  | 3         |
+| Pipe          | 3         |
+| Bong / Joint  | 5         |
 | XMax          | 1         |
-| XQ2 small     | 2         |
-| XQ2 large     | 3         |
+| XQ2 small     | 3         |
+| XQ2 large     | 5         |
 
 ## Spending — multiplier
 
@@ -64,11 +66,11 @@ So the multiplier ranges 1–3.
 | Action \ Context | Non-grind, ≥6pm (×1) | Non-grind AM / Grind PM (×2) | Grind AM (×3) |
 |------------------|----------------------|------------------------------|---------------|
 | One-hitter       | 1                    | 2                            | 3             |
-| Pipe             | 2                    | 4                            | 6             |
-| Bong / Joint     | 3                    | 6                            | 9             |
+| Pipe             | 3                    | 6                            | 9             |
+| Bong / Joint     | 5                    | 10                           | 15            |
 | XMax             | 1                    | 2                            | 3             |
-| XQ2 small        | 2                    | 4                            | 6             |
-| XQ2 large        | 3                    | 6                            | 9             |
+| XQ2 small        | 3                    | 6                            | 9             |
+| XQ2 large        | 5                    | 10                           | 15            |
 
 ("AM" = before 6:00 PM, "PM" = 6:00 PM or later. "Grind" = work today **and**
 tomorrow; "non-grind" = weekend, Friday, day off, or the eve of time off.)
@@ -99,7 +101,7 @@ day is pricier," the rule would instead key off *tomorrow* only.
 Every action writes a log entry:
 
 - timestamp
-- type: `earn` (daily / workout / cleaning / friday), `spend` (one-hitter / pipe /
+- type: `earn` (daily / workout / cleaning / danish / grocery / friday), `spend` (one-hitter / pipe /
   bong / xmax / xq2small / xq2large / exceptional), or `penalty` (munchies) — note
   the `bong` action is shown in the UI as "Bong / Joint"
 - coin delta (signed)

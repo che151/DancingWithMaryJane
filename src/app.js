@@ -5,6 +5,7 @@ import {
   EARN, CURRENCY, DISPLAY, MUNCHIES_PENALTY,
   EXCEPTIONALS_PER_MONTH, CLEANING_PER_WEEK, CLEANING_PER_DAY,
   WORKOUT_PER_WEEK, WORKOUT_PER_DAY, MUNCHIES_PER_DAY,
+  DANISH_PER_DAY, GROCERY_PER_WEEK, GROCERY_PER_DAY,
   VACATION_LEAD_DAYS, multiplier, costOf, isGrindDay, canMarkDayOff, dayKey,
 } from './economy.js';
 
@@ -12,6 +13,7 @@ const STORE_KEY = 'dwmj.state.v1';
 const SMOKE_ORDER = ['oneHitter', 'pipe', 'bong', 'xmax', 'xq2small', 'xq2large'];
 const LABELS = {
   daily: 'Daily', workout: 'Workout', cleaning: 'Cleaning', friday: 'Friday bonus',
+  danish: 'Danish', grocery: 'Groceries',
   oneHitter: DISPLAY.oneHitter, pipe: DISPLAY.pipe, bong: DISPLAY.bong,
   xmax: DISPLAY.xmax, xq2small: DISPLAY.xq2small, xq2large: DISPLAY.xq2large,
   exceptional: 'Exceptional', munchies: 'Munchies',
@@ -60,6 +62,8 @@ const countToday = action => {
 };
 const cleaningThisWeek = () => countInWeek('cleaning');
 const workoutThisWeek = () => countInWeek('workout');
+const groceryThisWeek = () => countInWeek('grocery');
+const danishToday = () => countToday('danish');
 const munchiesToday = () => countToday('munchies');
 const exceptionalsThisMonth = () => {
   const mk = monthKey(new Date());
@@ -97,6 +101,13 @@ function earn(action) {
   if (action === 'workout') {
     if (countToday('workout') >= WORKOUT_PER_DAY) return toast(`Workout already logged today (max ${WORKOUT_PER_DAY}/day).`);
     if (workoutThisWeek() >= WORKOUT_PER_WEEK) return toast(`Workout cap reached (${WORKOUT_PER_WEEK} per week).`);
+  }
+  if (action === 'danish') {
+    if (danishToday() >= DANISH_PER_DAY) return toast(`Danish already logged today (max ${DANISH_PER_DAY}/day).`);
+  }
+  if (action === 'grocery') {
+    if (countToday('grocery') >= GROCERY_PER_DAY) return toast(`Groceries already logged today (max ${GROCERY_PER_DAY}/day).`);
+    if (groceryThisWeek() >= GROCERY_PER_WEEK) return toast(`Groceries cap reached (${GROCERY_PER_WEEK} per week).`);
   }
   state.balance += EARN[action];
   log('earn', action, EARN[action], null);
@@ -249,6 +260,8 @@ function render() {
   renderSmokeButtons();
   $('workout-meta').textContent = `+1 · ${workoutThisWeek()}/${WORKOUT_PER_WEEK} wk`;
   $('clean-meta').textContent = `+1 · ${cleaningThisWeek()}/${CLEANING_PER_WEEK} wk`;
+  $('danish-meta').textContent = `+1 · ${danishToday()}/${DANISH_PER_DAY} day`;
+  $('grocery-meta').textContent = `+1 · ${groceryThisWeek()}/${GROCERY_PER_WEEK} wk`;
   $('exc-meta').textContent = `free · ${exceptionalsThisMonth()}/${EXCEPTIONALS_PER_MONTH} mo`;
   $('munch-meta').textContent = `−1 · ${munchiesToday()}/${MUNCHIES_PER_DAY} day`;
   renderRecent();
